@@ -1,10 +1,11 @@
-let playerWins, computerWins;
+let playerWins, computerWins, scoreDisplay, roundDisplay;
 
-function test() {
-  return "test";
-  const computerSelection = computerPlay();
-  const playerChoice = "Rock";
-}
+window.onload = function() {
+  scoreDisplay = document.getElementById("score");
+  roundDisplay = document.getElementById("round-results");
+  playerWins = 0;
+  computerWins = 0;
+};
 
 function computerPlay(){
   let choice = Math.floor(Math.random() * 3)
@@ -19,33 +20,38 @@ function computerPlay(){
 }
 
 function playRound(playerChoice, computerSelection) {
-  let playerInput = playerChoice.toUpperCase();
-
+  let playerInput = playerChoice;
   if((playerInput == "ROCK" && computerSelection == "PAPER") || (playerInput == "PAPER" && computerSelection == "SCISSORS") || (playerInput == "SCISSORS" && computerSelection == "ROCK")){
     /* PLAYER LOSES */
     computerWins++;
-    return "You Lose! " + computerSelection + " beats " + playerInput + "!";
+    roundDisplay.innerHTML = "You lose! " + computerSelection + " beats " + playerInput;
   }else if ((playerInput == "PAPER" && computerSelection == "ROCK") || (playerInput == "SCISSORS" && computerSelection == "PAPER") || (playerInput == "ROCK" && computerSelection == "SCISSORS")){
     /* PLAYER WINS */
     playerWins++;
-    return "You Win! " + playerInput + " beats " + computerSelection + "!";
+    roundDisplay.innerHTML = "You Win! " + playerInput + " beats " + computerSelection;
   }else if (playerInput == computerSelection){
     /* TIE */
-    return "It's a Tie! You both selected: " + playerInput + ".";
+    roundDisplay.innerHTMl = "It's a tie! You both picked " + playerInput;
   }
-  return "error";
+  updateScore();
+  return;
 }
 
 function game() {
-  playerWins = 0;
-  computerWins = 0;
-  while((playerWins + computerWins) < 5){
-    let choice = prompt("Rock, Paper, or Scissors: ");
-    alert(playRound(choice, computerPlay()));
+  if(playerWins == 3 || computerWins == 3){
+    if(playerWins > computerWins){
+      scoreDisplay.innerHTML = "Your Score: " + playerWins + "<br>Computer Score:" + computerWins + "<br>You Win! Refresh to Play Again";
+      roundDisplay.innerHTML = "";
+    }else if(computerWins > playerWins) {
+      scoreDisplay.innerHTML = "Your Score: " + playerWins + "<br>Computer Score:" + computerWins + "<br>You Lose! Refresh to Play Again";
+      roundDisplay.innerHTML = "";
+    }
   }
-  if(playerWins > computerWins){
-    alert("You Win!");
-  }else if(computerWins > playerWins) {
-    alert("You Lose!");
-  }
+  console.log("game function ended");
+  return;
+}
+
+function updateScore() {
+  scoreDisplay.innerHTML = "Your Score: " + playerWins + "<br>Computer Score:" + computerWins;
+  game();
 }
